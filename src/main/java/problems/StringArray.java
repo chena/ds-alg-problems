@@ -1,5 +1,9 @@
 package problems;
 
+import java.util.Map;
+
+import com.google.common.collect.Maps;
+
 public class StringArray {
 	
 	// compress a string from aabcccccaaa to a2blc5a3
@@ -43,6 +47,36 @@ public class StringArray {
 		}
 	}
 	
-	
+	// determine if two strings are anagrams of each other
+	// O(N) time = use hash structure
+	public static boolean isAnagram(String str1, String str2) {
+		if (str1.length() != str2.length()) {
+			return false;
+		}
+		Map<Character, Integer> lookup = Maps.newHashMap();
+		// create a map of character count for str1
+		char[] charArr = str1.toCharArray();
+		for (int i = 0; i < charArr.length; i++) {
+			char c = charArr[i];
+			if (lookup.containsKey(c)) {
+				lookup.put(c, lookup.get(c) + 1);
+			} else {
+				lookup.put(c, 1);
+			}
+		}
+		char[] charArr2 = str2.toCharArray();
+		for (int i = 0; i < charArr2.length; i++) {
+			char c = charArr2[i];
+			if (str1.indexOf(c) < 0) {
+				return false;
+			}
+			int count = lookup.get(c);
+			if (count == 0) {
+				return false; 
+			}
+			lookup.put(c,  count - 1);
+		}
+		return true;
+	}
 	
 }
