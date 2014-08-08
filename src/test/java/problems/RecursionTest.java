@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.google.common.collect.Lists;
+
 public class RecursionTest {
 	
 	@Test
@@ -21,4 +23,23 @@ public class RecursionTest {
 		assertThat(Recursion.permuate("ali"), equalTo(Arrays.asList("ali", "ail", "lai", "lia", "ial", "ila")));
 	}
 	
+	@Test
+	public void testGetTaxiPathNum() {
+		assertThat(Recursion.getTaxiPathNum(2, 2), equalTo(6));
+		assertThat(Recursion.getTaxiPathNum(3, 2), equalTo(10));
+	}
+	
+	@Test
+	public void testSum() {
+		List<Integer> list = Lists.newArrayList();
+		list.add(1);
+		list.add(2);
+		list.add(3);
+		assertThat(Recursion.sum(list), equalTo(6));
+	}
+	
+	@Test
+	public void testNChooseK() {
+		assertThat(Recursion.nChooseK(20, 3), equalTo(1140));
+	}
 }
