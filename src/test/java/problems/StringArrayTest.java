@@ -27,5 +27,32 @@ public class StringArrayTest {
 		assertFalse(StringArray.isAnagram("ab", "bba"));
 	}
 	
+	@Test
+	public void testUnique() {
+		assertTrue(StringArray.allCharUnique("alice"));
+		assertFalse(StringArray.allCharUnique("alicia"));
+		
+		assertTrue(StringArray.allCharUniqueN("alice"));
+		assertFalse(StringArray.allCharUniqueN("alicia"));
+	}
+	
+	@Test
+	public void testRemoveDupp() {
+		assertThat(StringArray.removeDupp("alicia"), equalTo("lcia"));
+		assertThat(StringArray.removeDupp("aaa"), equalTo("a"));
+		assertThat(StringArray.removeDupp("aab"), equalTo("ab"));
+	}
+	
+	@Test
+	public void testReplaceStr() {
+		assertThat(StringArray.replaceSpace("a lic e"), equalTo("a%20lic%20e"));
+		assertThat(StringArray.replaceSpace(" a "), equalTo("%20a%20"));
+	}
+	
+	@Test
+	public void testRotate() {
+		assertThat(StringArray.rotate(new int[][] { {1, 2, 3}, {4, 5, 6}}), equalTo(new int[][] {{4, 1}, {5, 2}, {6, 3}}));
+	}
+	
 	
 }

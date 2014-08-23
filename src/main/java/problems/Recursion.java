@@ -1,14 +1,24 @@
 package problems;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class Recursion {
-	
-	// how many ways are there to go up a stair given number of steps to climb
+	/*
+	how many ways are there to go up a stair given number of steps to climb
+	going one, two, or three steps at a time
+	tip: find the pattern 
+		0-1 
+		1-1 
+		2-2 (=1+1+0)
+		3-4 (=2+1+0)
+		4-7 (=4+2+1)
+	*/
 	public static int goUpStairs(int stepNum) {
 		if (stepNum < 0) {
 			return 0;
@@ -20,24 +30,32 @@ public class Recursion {
 	}
 	
 	// find all permutations of string
-	public static List<String> permuate(String str) {
-		List<String> list = Lists.newArrayList();
-		
-		if (str.length() == 2) {
-			list.add(str);
-			list.add(StringUtils.reverse(str));
-			return list;
+	// use set instead of list to handle repeated characters
+	public static Set<String> permuate(String str) {
+		if (str.length() < 2) {
+			return Sets.newHashSet(Arrays.asList(str));
 		}
 		
-		for (int i = 0; i < str.length(); i++) {
-			String prefix = str.substring(i, i + 1);
-			String rest = StringUtils.remove(str, prefix);
+		Set<String> set = Sets.newHashSet();
+		
+		if (str.length() == 2) {
+			set.add(str);
+			set.add(StringUtils.reverse(str));
+			return set;
+		}
+		
+		int len = str.length();
+		for (int i = 0; i < len; i++) {
+			//String prefix = str.substring(i, i + 1);
+			//String rest = StringUtils.remove(str, prefix);
+			char c = str.charAt(i);
+			String rest = str.substring(0 , i) + str.substring(i + 1, len);
 			for (String p : permuate(rest)) {
-				list.add(prefix + p);
+				set.add(c + p);
 			}
 		}
 		
-		return list;
+		return set;
 	}
 	
 	// taxi problem going from left top to bottom right corner of a MxN grid
@@ -79,5 +97,15 @@ public class Recursion {
 		}
 		return nChooseK(n - 1, k) + nChooseK(n - 1, k - 1);
 	}
+	
+	// find the Nth number in the fibonacci series
+	public static int fib(int n) {
+		if (n < 2) {
+			return n; 
+		}
+		return fib(n - 1) + fib(n - 2);
+	}
+	
+	
 	
 }
