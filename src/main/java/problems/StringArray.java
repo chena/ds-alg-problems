@@ -1,12 +1,20 @@
 package problems;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
+
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class StringArray {
 	
-	// compress a string from aabcccccaaa to a2blc5a3
+	// 1. compress a string from aabcccccaaa to a2blc5a3
 	public static String compress(String input) {
 		if (input.isEmpty()) {
 			return input;
@@ -29,13 +37,14 @@ public class StringArray {
 			c = next;
 		}
 		
+		// we need to make sure to append the last char onto the list
 		out.append(c);
 		out.append(count);
 		
 		return out.toString();
 	}
 	
-	// reverse a string in place 
+	// 2. reverse a string in place 
 	// use char array because arrays are mutable, strings are not
 	public static void reverse(char[] input) {
 		int start = 0;
@@ -47,7 +56,7 @@ public class StringArray {
 		}
 	}
 	
-	// determine if two strings are anagrams of each other
+	// 3. determine if two strings are anagrams of each other
 	// O(n log n) = sort both and compare equality
 	// O(n) time = use hash structure
 	public static boolean isAnagram(String str1, String str2) {
@@ -80,7 +89,7 @@ public class StringArray {
 		return true;
 	}
 	
-	// determine if a string has all unique characters (without using additional data structures)
+	// 4. determine if a string has all unique characters (without using additional data structures)
 	// this solution is O(n^2) because indexOf is a linear operation - try a O(n) solution
 	public static boolean allCharUnique(String input) {
 		int size = input.length();
@@ -105,15 +114,15 @@ public class StringArray {
 		return true;	
 	}
 	
-	// remove all duplicates in a string
+	// 5. remove all duplicates in a string
 	// assuming we are removing the first occurrence
-	// be careful with moving indexes in  changing string
+	// this is O(n^2)
 	public static String removeDupp(String str) {
 		int index = 0;
 		while (index < str.length() - 1) {
-			String sub = str.substring(index + 1);
-			if (sub.indexOf(str.charAt(index)) > -1) {
-				str = str.substring(0, index) + sub;
+			String c = str.substring(index, index + 1);
+			if (str.substring(index + 1).indexOf(c) > -1) {
+				str = str.replaceFirst(c, "");
 			} else {
 				index++;
 			}
@@ -121,7 +130,25 @@ public class StringArray {
 		return str;
 	}
 	
-	// replace all space with %20 without creating a new string
+	// if order doesn't matter, we can first sort the string
+	// n log n
+	public static String removeDuppSort(String str) {
+		List<String> list = Lists.newArrayList(Arrays.asList(str.split("")));
+		Collections.sort(list);
+		int index = 0;
+		
+		while (index < list.size() - 1) {
+			if (list.get(index).equals(list.get(index + 1))) {
+				list.remove(index);
+			} else {
+				index++;
+			}
+		}
+		return StringUtils.join(list.toArray());
+	}
+	
+	
+	// 6. replace all space with %20 without creating a new string
 	public static String replaceSpace(String str) {
 		char space = ' ';
 		String newSpace = "%20";
@@ -137,7 +164,7 @@ public class StringArray {
 		return str;
 	}
 	
-	// rotate an NxM matrix by 90 degree
+	// 7. rotate an NxM matrix by 90 degree
 	public static int[][] rotate(int[][] mat) {
 		int rowNum = mat.length;
 		int nCol = mat[0].length;
@@ -149,4 +176,109 @@ public class StringArray {
 		}
  		return newMat;
 	}
+
+	// 8. Write an algorithm such that if an element in an MxN matrix is 0, its entire row and column is set to 0.
+	// first scan throw the matrix and mark the rows and columns that are zero
+	// then second scan actually update the cells
+	public static int[][] setZero(int[][] mat) {
+		int row = mat.length;
+		int col = mat[0].length;
+		boolean[] rowCheck = new boolean[row];
+		boolean[] colCheck = new boolean[col];
+		
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
+				if (mat[i][j] == 0)  {
+					rowCheck[i] = true;
+					colCheck[j] = true;
+				}
+			}
+		}
+		
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
+				if (rowCheck[i] || colCheck[j]) {
+					mat[i][j] = 0;
+				}
+			}
+		}
+		return mat;
+	}
+	
+	// 9. given the isSubstring function, check if one string is a rotation of the other
+	// concatenate s2 and and check if the concatenated string contains the original string
+	public static boolean checkRotatedString(String s1, String s2) {
+		if (s1.length() != s2.length()) {
+			return false;
+		}
+		return isSubstring(s2+ s2, s1);
+	}
+	
+	// check if one string is the substring of the other
+	private static boolean isSubstring(String s1, String s2) {
+		return s1.contains(s2);
+	}
+	
+	// 10. find the most common string in a list
+	public static String getMostCommonWord(List<String> words) {
+		Map<String, Integer> wordMap = Maps.newLinkedHashMap();
+		int maxCount = 0;
+		String maxWord = "";
+		for (String word : words) {
+			if (!wordMap.containsKey(word)) {
+				int count = Collections.frequency(words, word);
+				if (count > maxCount) {
+					maxCount = count;
+					maxWord = word;
+				}
+				wordMap.put(word, count);
+			}
+		}
+		return maxWord;
+	}
+	
+	// 11. find largest k elements in an array without sorting
+	// selection approach
+	public static int[] findLargestK(int[] list, int k) {
+		for (int i = 0; i < k; i++) {
+			int maxInd = i;
+			int maxVal = list[i];
+			for (int j = i + 1; j < list.length; j++) {
+				int val = list[j];
+				if (val > maxVal) {
+					maxVal = val;
+					maxInd = j;
+				}
+			}
+			list[maxInd] = list[i];
+			list[i] = maxVal;
+		}
+		return ArrayUtils.subarray(list, 0, k);
+	}
+	
+	// 12. write an algorithm to find all pairs of integers that sum to a specific value in an array
+	// better approach O(n)
+	public static List<Pair<Integer, Integer>> findSumPair(List<Integer> list, int num ) {
+		List<Pair<Integer, Integer>> pairs = Lists.newArrayList();
+		Collections.sort(list);
+		
+		int start = 0;
+		int end = list.size() - 1;
+		while (start < end) {
+			int left = list.get(start);
+			int right = list.get(end);
+			int sum = left + right;
+			if (sum == num) {
+				pairs.add(Pair.of(left, right));
+				start++;
+				end--;
+			} else if (sum < num) {
+				start++;
+			} else {
+				end--;
+			}
+		} 
+		return pairs;
+	}
 }
+
