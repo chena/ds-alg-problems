@@ -13,18 +13,18 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class StringArray {
-	
+
 	// 1. compress a string from aabcccccaaa to a2blc5a3
 	public static String compress(String input) {
 		if (input.isEmpty()) {
 			return input;
 		}
-		
+
 		StringBuilder out = new StringBuilder();
-		
+
 		char c = input.charAt(0);
 		int count = 1;
-		
+
 		for (int i = 1; i < input.length(); i++) {
 			char next = input.charAt(i);
 			if (next == c) {
@@ -36,15 +36,15 @@ public class StringArray {
 			}
 			c = next;
 		}
-		
+
 		// we need to make sure to append the last char onto the list
 		out.append(c);
 		out.append(count);
-		
+
 		return out.toString();
 	}
-	
-	// 2. reverse a string in place 
+
+	// 2. reverse a string in place
 	// use char array because arrays are mutable, strings are not
 	public static void reverse(char[] input) {
 		int start = 0;
@@ -55,7 +55,7 @@ public class StringArray {
 			input[end--] = temp;
 		}
 	}
-	
+
 	// 3. determine if two strings are anagrams of each other
 	// O(n log n) = sort both and compare equality
 	// O(n) time = use hash structure
@@ -82,15 +82,17 @@ public class StringArray {
 			}
 			int count = lookup.get(c);
 			if (count == 0) {
-				return false; 
+				return false;
 			}
-			lookup.put(c,  count - 1);
+			lookup.put(c, count - 1);
 		}
 		return true;
 	}
-	
-	// 4. determine if a string has all unique characters (without using additional data structures)
-	// this solution is O(n^2) because indexOf is a linear operation - try a O(n) solution
+
+	// 4. determine if a string has all unique characters (without using
+	// additional data structures)
+	// this solution is O(n^2) because indexOf is a linear operation - try a
+	// O(n) solution
 	public static boolean allCharUnique(String input) {
 		int size = input.length();
 		for (int i = 0; i < size - 1; i++) {
@@ -100,20 +102,20 @@ public class StringArray {
 		}
 		return true;
 	}
-	
+
 	// use ASCII as indices (0-255)
 	public static boolean allCharUniqueN(String input) {
 		boolean[] checks = new boolean[128];
 		for (int i = 0; i < input.length(); i++) {
 			char c = input.charAt(i);
-			if(checks[c]) {
+			if (checks[c]) {
 				return false;
 			}
 			checks[c] = true;
 		}
-		return true;	
+		return true;
 	}
-	
+
 	// 5. remove all duplicates in a string
 	// assuming we are removing the first occurrence
 	// this is O(n^2)
@@ -129,14 +131,14 @@ public class StringArray {
 		}
 		return str;
 	}
-	
+
 	// if order doesn't matter, we can first sort the string
 	// n log n
 	public static String removeDuppSort(String str) {
 		List<String> list = Lists.newArrayList(Arrays.asList(str.split("")));
 		Collections.sort(list);
 		int index = 0;
-		
+
 		while (index < list.size() - 1) {
 			if (list.get(index).equals(list.get(index + 1))) {
 				list.remove(index);
@@ -144,10 +146,10 @@ public class StringArray {
 				index++;
 			}
 		}
+
 		return StringUtils.join(list.toArray());
 	}
-	
-	
+
 	// 6. replace all space with %20 without creating a new string
 	public static String replaceSpace(String str) {
 		char space = ' ';
@@ -155,7 +157,7 @@ public class StringArray {
 		int index = 0;
 		while (index < str.length()) {
 			if (str.charAt(index) == space) {
-				str = str.substring(0, index) + newSpace + str.substring(index+1);
+				str = str.substring(0, index) + newSpace + str.substring(index + 1);
 				index += 3;
 			} else {
 				index++;
@@ -163,21 +165,22 @@ public class StringArray {
 		}
 		return str;
 	}
-	
+
 	// 7. rotate an NxM matrix by 90 degree
 	public static int[][] rotate(int[][] mat) {
 		int rowNum = mat.length;
 		int nCol = mat[0].length;
 		int[][] newMat = new int[nCol][rowNum];
- 		for (int r = 0; r < rowNum; r++) {
+		for (int r = 0; r < rowNum; r++) {
 			for (int c = 0; c < nCol; c++) {
 				newMat[c][rowNum - r - 1] = mat[r][c];
 			}
 		}
- 		return newMat;
+		return newMat;
 	}
 
-	// 8. Write an algorithm such that if an element in an MxN matrix is 0, its entire row and column is set to 0.
+	// 8. Write an algorithm such that if an element in an MxN matrix is 0, its
+	// entire row and column is set to 0.
 	// first scan throw the matrix and mark the rows and columns that are zero
 	// then second scan actually update the cells
 	public static int[][] setZero(int[][] mat) {
@@ -185,16 +188,16 @@ public class StringArray {
 		int col = mat[0].length;
 		boolean[] rowCheck = new boolean[row];
 		boolean[] colCheck = new boolean[col];
-		
+
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
-				if (mat[i][j] == 0)  {
+				if (mat[i][j] == 0) {
 					rowCheck[i] = true;
 					colCheck[j] = true;
 				}
 			}
 		}
-		
+
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
 				if (rowCheck[i] || colCheck[j]) {
@@ -204,21 +207,23 @@ public class StringArray {
 		}
 		return mat;
 	}
-	
-	// 9. given the isSubstring function, check if one string is a rotation of the other
-	// concatenate s2 and and check if the concatenated string contains the original string
+
+	// 9. given the isSubstring function, check if one string is a rotation of
+	// the other
+	// concatenate s2 and and check if the concatenated string contains the
+	// original string
 	public static boolean checkRotatedString(String s1, String s2) {
 		if (s1.length() != s2.length()) {
 			return false;
 		}
-		return isSubstring(s2+ s2, s1);
+		return isSubstring(s2 + s2, s1);
 	}
-	
+
 	// check if one string is the substring of the other
 	private static boolean isSubstring(String s1, String s2) {
 		return s1.contains(s2);
 	}
-	
+
 	// 10. find the most common string in a list
 	public static String getMostCommonWord(List<String> words) {
 		Map<String, Integer> wordMap = Maps.newLinkedHashMap();
@@ -234,9 +239,10 @@ public class StringArray {
 				wordMap.put(word, count);
 			}
 		}
+
 		return maxWord;
 	}
-	
+
 	// 11. find largest k elements in an array without sorting
 	// selection approach
 	public static int[] findLargestK(int[] list, int k) {
@@ -255,13 +261,14 @@ public class StringArray {
 		}
 		return ArrayUtils.subarray(list, 0, k);
 	}
-	
-	// 12. write an algorithm to find all pairs of integers that sum to a specific value in an array
+
+	// 12. write an algorithm to find all pairs of integers that sum to a
+	// specific value in an array
 	// better approach O(n)
-	public static List<Pair<Integer, Integer>> findSumPair(List<Integer> list, int num ) {
+	public static List<Pair<Integer, Integer>> findSumPair(List<Integer> list, int num) {
 		List<Pair<Integer, Integer>> pairs = Lists.newArrayList();
 		Collections.sort(list);
-		
+
 		int start = 0;
 		int end = list.size() - 1;
 		while (start < end) {
@@ -277,8 +284,41 @@ public class StringArray {
 			} else {
 				end--;
 			}
-		} 
+		}
 		return pairs;
 	}
-}
 
+	public static String longestSubstringNoRepeat(String str) {
+		int count = 0;
+		int maxCount = 0;
+		String maxSubstring = "";
+		String current = "" + str.charAt(0);
+
+		for (int i = 1; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if (current.indexOf(c) > -1) {
+				if (count > maxCount) {
+					maxCount = count;
+					maxSubstring = current;
+					current = "" + c;
+				}
+				count = 0;
+			} else {
+				count++;
+				current += c;
+			}
+		}
+		return maxSubstring;
+	}
+	
+	public static boolean oneToNine(int[] numbers) {
+		boolean[] checkes = new boolean[10];
+		for (int i = 0; i < numbers.length; i++) {
+			if (checkes[numbers[i]]) {
+				return false;
+			}
+			checkes[numbers[i]] = true;
+		}
+		return true;
+	}
+}

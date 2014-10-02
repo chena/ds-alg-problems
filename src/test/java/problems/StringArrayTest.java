@@ -95,4 +95,15 @@ public class StringArrayTest {
 				equalTo(Arrays.asList(Pair.of(1, 4), Pair.of(2, 3))));
 	}
 	
+	@Test
+	public void testLongestSubstring() {
+		assertThat(StringArray.longestSubstringNoRepeat("abcabcbb"), equalTo("abc"));
+	}
+	
+	@Test
+	public void testOneToNine() {
+		assertTrue(StringArray.oneToNine(new int[] {2, 3, 1, 5, 4, 6, 8, 7, 9}));
+		assertFalse(StringArray.oneToNine(new int[] {2, 3, 1, 5, 4, 6, 8, 8, 9}));
+	}
+	
 }
