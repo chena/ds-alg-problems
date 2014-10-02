@@ -159,6 +159,21 @@ public class LinkedList {
 		return n1;
 	}
 	
+	// 8. reverse a linked list
+	public static Node reverse(Node node) {
+		Node previous = null;
+		Node next;
+		//Node node = head;
+		while (node != null) {
+			next = node.getNext();
+			node.setNext(previous);
+			previous = node;
+			node = next;
+		}
+		//printNodes(previous);
+		return previous;
+	}
+	
 	// helper method
 	public static void printNodes(Node node) {
 		while (node != null) {

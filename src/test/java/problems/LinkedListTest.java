@@ -80,4 +80,15 @@ public class LinkedListTest {
 		n.setNext(nodes[1]);
 		assertThat(LinkedList.commonNode(nodes[0], n).getValue(), equalTo(3));
 	}
+	
+	@Test
+	public void testReverse() {
+		Node reversed = LinkedList.reverse(nodes[0]);
+		Node mid = reversed.getNext();
+		Node last = mid.getNext();
+		assertThat(reversed.getValue(), equalTo(5));
+		assertThat(mid.getValue(), equalTo(3));
+		assertThat(last.getValue(), equalTo(2));
+		assertThat(last.getNext(), equalTo(null));
+	}
 }
