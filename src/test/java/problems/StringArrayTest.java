@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
@@ -102,8 +103,45 @@ public class StringArrayTest {
 	
 	@Test
 	public void testOneToNine() {
-		assertTrue(StringArray.oneToNine(new int[] {2, 3, 1, 5, 4, 6, 8, 7, 9}));
-		assertFalse(StringArray.oneToNine(new int[] {2, 3, 1, 5, 4, 6, 8, 8, 9}));
+		assertTrue(StringArray.containsAllInRange(new int[] {2, 3, 1, 5, 4, 6, 8, 7, 9}));
+		assertFalse(StringArray.containsAllInRange(new int[] {2, 3, 1, 5, 4, 6, 8, 8, 9}));
+		assertFalse(StringArray.containsAllInRange(new int[] {2, 3, 1, 5, 4, 6, 8, 10, 9}));
+	}
+	
+	@Test
+	public void testFindMinMax() {
+		assertThat(StringArray.findMinMax(new int[] {2, 5, 3, 4, 1}), equalTo(new int[] {1, 5}));
+	}
+	
+	@Test
+	public void testFindKthUnion() {
+		int[] s1 = new int[] {3, 4, 6, 7};
+		int[] s2 = new int[] {1, 3, 4, 7, 8};
+		assertThat(StringArray.findKthUnion(s1, s2, 4), equalTo(6));
+		assertThat(StringArray.findKthUnion(s1, s2, 6), equalTo(8));
+	}
+	
+	@Test
+	public void testFindAnagrams() {
+		List<List<String>> result = StringArray.findAnagrams(Arrays.asList("alice", "flow", "flows", "slowf", "licea", "chen", "wolf", "abc", "cb"));
+		assertThat(result.size(), equalTo(3));
+		assertThat(result.toString(), equalTo("[[alice, licea], [flow, wolf], [flows, slowf]]"));
+	}
+	
+	@Test
+	public void testMostCommonWord() {
+		assertThat(StringArray.findMaxCountWord("another not so good day tomorrow is another day good night good bye"), equalTo("good"));
+	}
+	
+	@Test
+	public void testBoxSizes() {
+		assertThat(StringArray.getBoxSize(new int[] {10, 20, 40, 60, 80}, 5), equalTo(10));
+	}
+	
+	@Test
+	public void testPalindrome() {
+		assertFalse(StringArray.isPalindrome(123));
+		assertTrue(StringArray.isPalindrome(53435));
 	}
 	
 }

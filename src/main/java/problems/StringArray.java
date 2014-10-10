@@ -2,8 +2,12 @@ package problems;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -311,14 +315,178 @@ public class StringArray {
 		return maxSubstring;
 	}
 	
-	public static boolean oneToNine(int[] numbers) {
-		boolean[] checkes = new boolean[10];
-		for (int i = 0; i < numbers.length; i++) {
-			if (checkes[numbers[i]]) {
+	public static boolean containsAllInRange(int[] numbers) {
+		int len = numbers.length;
+		boolean[] checkes = new boolean[len];
+		int val;
+		for (int i = 0; i < len; i++) {
+			val = numbers[i];
+			if (val > len || checkes[val - 1]) {
 				return false;
 			}
-			checkes[numbers[i]] = true;
+			checkes[val - 1] = true;
 		}
 		return true;
+	}
+	
+	// 14. find the smallest and biggest numbers from a list
+	public static int[] findMinMax(int[] list) {
+		int min = list[0];
+		int max = list[0];
+		int currMax;
+		int currMin;
+		for (int i = 1; i < list.length - 1; i = i + 2) {
+			currMax = Math.max(list[i], list[i + 1]);
+			currMin = Math.min(list[i], list[i + 1]);
+			if (currMax > max) {
+				max = currMax;
+			}
+			if (currMin < min) {
+				min = currMin;
+			}
+		}
+		return new int[] {min, max};
+	}
+	
+	// 15. find the kth smallest element in the union of two arrays
+	public static int findKthUnion(int[] arr1, int[] arr2, int k) {
+		int ind1 = 0;
+		int ind2 = 0;
+		int index = 0;
+		int item;
+		while (ind1 < arr1.length && ind2 < arr2.length && index < k) {
+			if (arr1[ind1] == arr2[ind2]) {
+				item = arr1[ind1++];
+				ind2++;
+			} else if (arr1[ind1] < arr2[ind2]) {
+				item = arr1[ind1++];
+			} else {
+				item = arr2[ind2++];
+			}
+			if (++index == k) {
+				return item;
+			}
+		}
+		if (index == k) {
+			return -1;
+		}
+		while (ind1 < arr1.length) {
+			if (++index == k) {
+				return arr1[ind1];
+			}
+			ind1++;
+		}
+		while (ind2 < arr2.length) {
+			if (++index == k) {
+				return arr2[ind2];
+			}
+			ind2++;
+		}
+		return -1;
+	}
+	
+	// 16. Find all anagrams from a list of string
+	// eg. ["alice", "flow", "flows", "slowf", "licea", "chen", "wolf", "abc", "cb"]
+	public static List<List<String>> findAnagrams(List<String> anagrams) {
+		Map<String, List<String>> mappings = Maps.newHashMap();
+		List<List<String>> results = Lists.newArrayList();
+		char[] c;
+		String sorted;
+		for (String str : anagrams) {
+			c = str.toCharArray();
+			Arrays.sort(c);
+			sorted = new String(c);
+			
+			if (mappings.containsKey(sorted)) {
+				mappings.get(sorted).add(str);
+			} else {
+				List<String> newList = Lists.newArrayList(str);
+				mappings.put(sorted, newList);
+			}
+		}
+		for (List<String> ana: mappings.values()) {
+			if (ana.size() > 1) {
+				results.add(ana);
+			}
+		}
+		return results;
+	}
+	
+	// 17. Given an arbitrary sentence, find the most occurring word.
+	public static String findMaxCountWord(String sentence) {
+		String[] words = sentence.split(" ");
+		Map<String, Integer> counts = new HashMap<String, Integer>();
+		for (String word : words) {
+			if (counts.containsKey(word)) {
+				counts.put(word, counts.get(word) + 1);
+		} else {
+			counts.put(word, 1);
+		}
+	}
+	
+	int max = 0;
+	String maxWord = "";
+	for (Entry<String, Integer> entry : counts.entrySet()) {
+		if (entry.getValue() > max) {
+			max = entry.getValue();
+			maxWord = entry.getKey();
+		}
+	}
+		return maxWord;
+	}
+	
+	// 18.Given an array of sorted integers which represent box sizes and an integer representing an item size
+	// O(n) approach
+	public static int getBoxBruteForce(int[] sizes, int item) {
+		for (int s : sizes) {
+			if (item < s) {
+				return s;
+			}
+		}
+		return -1;
+	}
+	
+	// logN approach
+	// [10, 20, 40, 60, 80], 15 --> 20
+	public static int getBoxSize(int[] sizes, int item) {
+		int mid, midVal;
+		int start = 0;
+		int end = sizes.length - 1;
+		while (start <= end) {
+			mid = (start + end) / 2;
+			midVal = sizes[mid];
+			if (midVal < item) {
+				start = mid + 1;
+			} else if (midVal == item || mid == 0 && midVal > item || sizes[mid - 1] < item) {
+				return midVal;
+			} else {
+				end = mid - 1;
+			}
+		}
+		return -1;
+	}
+	
+	// 19. Check if a number is a palindrome without additional memory
+	public static boolean isPalindrome(int num) {
+		int reversed = 0;
+		int original = num;
+		while (num > 0) {
+			reversed = reversed * 10 + num % 10;
+			num /= 10;
+		}
+		return original == reversed;
+	}
+	
+	// 20. remove duplicates from a list of string
+	public static String[] removeDupp(String[] strings) {
+		Set<String> set = new HashSet<String>();
+		List<String> result = Lists.newArrayList();
+		for (String str : strings) {
+			if (!set.contains(str)) {
+				result.add(str);
+			} 
+			result.add(str);
+		}
+		return (String[]) result.toArray();
 	}
 }
