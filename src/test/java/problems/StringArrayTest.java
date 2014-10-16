@@ -144,4 +144,9 @@ public class StringArrayTest {
 		assertTrue(StringArray.isPalindrome(53435));
 	}
 	
+	@Test
+	public void testPandrome() {
+		assertThat(StringArray.pangram("A quick brown fox jumps over the lazy dog"), equalTo("NULL"));
+		assertThat(StringArray.pangram("A slow yellow fox crawls under the proactive dog"), equalTo("bjkmqz"));
+	}
 }

@@ -489,4 +489,22 @@ public class StringArray {
 		}
 		return (String[]) result.toArray();
 	}
+	
+	// 21. determine if a string is a pangram
+    public static String pangram(String str) {
+        boolean[] checks = new boolean[128];
+        str = str.toLowerCase();
+        String missing = "";
+        int start = 'a';
+        int end = start + 26 - 1;
+        for (char c : str.toCharArray()) {
+            checks[c] = true;
+        }
+        for (int i = start; i <= end; i++) {
+            if (!checks[i]) {
+                missing += (char) i;
+            }
+        }
+        return missing.isEmpty() ? "NULL" : missing;
+    }
 }
